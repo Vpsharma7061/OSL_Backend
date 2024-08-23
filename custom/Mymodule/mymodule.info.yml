@@ -1,0 +1,6 @@
+name: 'My_Module'
+type: module
+description: 'Provides a custom page and menu link.'
+core_version_requirement: ^10
+package: Custom
+dependencies: []

@@ -1,0 +1,9 @@
+employee.form_link:
+  title: 'Employee Form'
+  description: 'Fill out the employee form'
+  route_name: employee.form
+  menu_name: main
+  weight: 3
+  options:
+    attributes:
+      target: _blank

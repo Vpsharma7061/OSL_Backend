@@ -1,0 +1,9 @@
+Mymodule.custom_page:
+  title: 'Custom Page'
+  description: 'A custom page provided by MyModule.'
+  route_name: Mymodule.custom_page
+  weight: 0
+  menu_name: main
+  options:
+    attributes:
+      target: _blank
