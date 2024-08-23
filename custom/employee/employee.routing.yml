@@ -1,7 +1,8 @@
 employee.form:
   path: '/employee-form'
   defaults:
-    _form: '\Drupal\employee\Form\EmployeeForm'
+    # _form: '\Drupal\employee\Form\EmployeeForm'
+    _controller: '\Drupal\employee\Controller\EmployeeController::createEmployee'
     _title: 'Employee Form'
   requirements:
     _permission: 'access content'
