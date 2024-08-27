@@ -6,3 +6,32 @@ employee.form:
     _title: 'Employee Form'
   requirements:
     _permission: 'access content'
+    _roles: 'Administrator'
+
+employee.details:
+  path: '/employee-details'
+  defaults:
+    _controller: '\Drupal\employee\Controller\EmployeeController::displayEmployees'
+    _title: 'Employee Details'
+  requirements:
+    _permission: 'access content'
+
+employee.edit:
+  path: '/edit-employee/{id}'
+  defaults:
+    _controller: 'Drupal\employee\Controller\EmployeeController::editEmployee'
+    _title: 'Edit Employee'
+  requirements:
+    _permission: 'access content'
+    id: \d+
+  methods: [GET, POST]
+
+employee.delete:
+  path: '/delete-employee/{id}'
+  defaults:
+    _controller: 'Drupal\employee\Controller\EmployeeController::deleteEmployee'
+    _title: 'Delete Employee'
+  requirements:
+    _permission: 'access content'
+    id: \d+
+  methods: [GET]

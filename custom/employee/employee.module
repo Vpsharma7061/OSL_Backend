@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * Implements hook_theme().
+ */
+function employee_theme() {
+  return [
+    'employee' => [
+      'variables' => ['items' => []],
+      'template' => 'employee',
+    ],
+    'employee_data' => [
+      'variables' => ['employees' => []],
+      'template' => 'employee-data',
+    ],
+  ];
+}
+

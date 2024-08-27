@@ -7,3 +7,13 @@ employee.form_link:
   options:
     attributes:
       target: _blank
+
+employee.details_link:
+  title: 'Employee Details'
+  description: 'View submitted employee data'
+  route_name: employee.details
+  menu_name: main
+  weight: 4
+  options:
+    attributes:
+      target: '_blank'
