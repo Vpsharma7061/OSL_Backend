@@ -35,3 +35,13 @@ employee.delete:
     _permission: 'access content'
     id: \d+
   methods: [GET]
+
+employee.api_employees:
+  path: '/api/nodes'
+  defaults:
+    _controller: '\Drupal\employee\Controller\NodeApiController::getNodes'
+    _title: 'Employee List'
+  requirements:
+    _permission: 'access content'
+  methods: [GET]
+

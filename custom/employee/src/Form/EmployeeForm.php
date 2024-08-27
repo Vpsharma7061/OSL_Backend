@@ -5,6 +5,7 @@ namespace Drupal\employee\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Database\Database;
+use Drupal\node\Entity\Node; // Import the Node entity
 
 class EmployeeForm extends FormBase {
 
@@ -108,6 +109,15 @@ class EmployeeForm extends FormBase {
         ])
         ->execute();
       \Drupal::messenger()->addMessage($this->t('Employee details saved successfully.'));
+
+      // Create a node after saving the employee
+      $node = Node::create([
+        'type' => 'employee_form', // Replace with your content type machine name
+        'title' => $form_state->getValue('emp_name'),
+        'field_age' => $form_state->getValue('emp_age'), // Replace with your field name
+        'field_email' => $form_state->getValue('emp_email'), // Replace with your field name
+      ]);
+      $node->save();
     }
   }
 }

@@ -81,7 +81,7 @@ class EmployeeController extends ControllerBase {
       '#type'   => 'table',
       '#header' => $header,
       '#rows'   => $data,
-      '#attributes' => ['class' => ['my-custom-table']],
+      '#attributes' => ['class' => ['employee-table']],
     ];
 
     $build['pager'] = [
