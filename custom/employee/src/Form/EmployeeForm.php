@@ -4,7 +4,6 @@ namespace Drupal\employee\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Database\Database;
 use Drupal\node\Entity\Node; // Import the Node entity
 
 class EmployeeForm extends FormBase {
@@ -114,10 +113,18 @@ class EmployeeForm extends FormBase {
       $node = Node::create([
         'type' => 'employee_form', // Replace with your content type machine name
         'title' => $form_state->getValue('emp_name'),
-        'field_age' => $form_state->getValue('emp_age'), // Replace with your field name
-        'field_email' => $form_state->getValue('emp_email'), // Replace with your field name
+        'field_emp_age' => $form_state->getValue('emp_age'), // Correct field machine name
+        'field_emp_email' => $form_state->getValue('emp_email'), // Correct field machine name
+        'field_emp_name' => $form_state->getValue('emp_name'), // Correct field machine name
       ]);
-      $node->save();
+
+      try {
+        $node->save();
+        \Drupal::messenger()->addMessage($this->t('Employee node created successfully.'));
+      } catch (\Exception $e) {
+        \Drupal::logger('employee')->error('Error creating node: @message', ['@message' => $e->getMessage()]);
+        \Drupal::messenger()->addError($this->t('An error occurred while creating the employee node.'));
+      }
     }
   }
 }

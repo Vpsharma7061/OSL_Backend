@@ -45,3 +45,12 @@ employee.api_employees:
     _permission: 'access content'
   methods: [GET]
 
+employee.post_data:
+  path: '/employee/post-data'
+  defaults:
+    _controller: '\Drupal\employee\Controller\PostDataController::saveData'
+    _title: 'Post Employee Data'
+  methods: [POST]
+  requirements:
+    _permission: 'access content'
+
