@@ -3,9 +3,9 @@
 namespace Drupal\employee\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Database\Database;
-use Drupal\Core\Url;
 use Drupal\Core\Link;
+use Drupal\Core\Url;
+
 /**
  * Controller for handling employee-related functionality.
  */
@@ -47,26 +47,22 @@ class EmployeeController extends ControllerBase {
     $params = \Drupal::request()->query->all();
 
     if (empty($params) ||  $params['page'] == 0) {
-    $count = 1;
+      $count = 1;
     }
-     else if($params['page']==1) {
-    $count = $params['page'] + $limit;
-   }
-   else{
-    $count = $params['page'] * $limit;
-    $count++;
-   }
-
-   
-
-    
+    elseif ($params['page'] == 1) {
+      $count = $params['page'] + $limit;
+    }
+    else {
+      $count = $params['page'] * $limit;
+      $count++;
+    }
 
     foreach ($result as $row) {
       $edit_url = Url::fromRoute('employee.edit', ['id' => $row->id]);
       $delete_url = Url::fromRoute('employee.delete', ['id' => $row->id]);
 
       $data[] = [
-        'id'        => $count.".",
+        'id'        => $count . ".",
         'emp_name'  => $row->emp_name,
         'emp_age'   => $row->emp_age,
         'emp_email' => $row->emp_email,
@@ -124,6 +120,8 @@ class EmployeeController extends ControllerBase {
       ->execute();
 
     \Drupal::messenger()->addMessage(t('Employee has been deleted successfully.'));
-    return $this->redirect('employee.details'); // Replace 'employee.list' with the correct route name for your list page.
+    // Replace 'employee.list' with the correct route name for your list page.
+    return $this->redirect('employee.details');
   }
+
 }

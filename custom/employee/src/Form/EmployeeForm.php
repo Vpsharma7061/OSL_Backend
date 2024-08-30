@@ -4,8 +4,12 @@ namespace Drupal\employee\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\node\Entity\Node; // Import the Node entity
+// Import the Node entity.
+use Drupal\node\Entity\Node;
 
+/**
+ *
+ */
 class EmployeeForm extends FormBase {
 
   /**
@@ -19,7 +23,7 @@ class EmployeeForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state, $id = NULL) {
-    // Check if we are editing an existing employee
+    // Check if we are editing an existing employee.
     $employee = NULL;
     if ($id) {
       $query = \Drupal::database();
@@ -56,7 +60,7 @@ class EmployeeForm extends FormBase {
       '#value' => $id ? $this->t('Update') : $this->t('Submit'),
     ];
 
-    // Store the employee ID if we're editing
+    // Store the employee ID if we're editing.
     if ($id) {
       $form['id'] = [
         '#type' => 'hidden',
@@ -70,16 +74,15 @@ class EmployeeForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
-    if (!ctype_alpha(str_replace(' ', '', $form_state->getValue('emp_name')))) {
-      $form_state->setErrorByName('emp_name', $this->t('The name should contain only letters and spaces.'));
-    }
-
-    $age = $form_state->getValue('emp_age');
-    if ($age < 18 || $age > 65) {
-      $form_state->setErrorByName('emp_age', $this->t('Age must be between 18 and 65.'));
-    }
-  }
+  // Public function validateForm(array &$form, FormStateInterface $form_state) {
+  //   if (!ctype_alpha(str_replace(' ', '', $form_state->getValue('emp_name')))) {
+  //     $form_state->setErrorByName('emp_name', $this->t('The name should contain only letters and spaces.'));
+  //   }.
+  // $age = $form_state->getValue('emp_age');
+  //   if ($age < 18 || $age > 65) {
+  //     $form_state->setErrorByName('emp_age', $this->t('Age must be between 18 and 65.'));
+  //   }
+  // }.
 
   /**
    * {@inheritdoc}
@@ -87,7 +90,7 @@ class EmployeeForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $query = \Drupal::database();
 
-    // If we're editing, update the record
+    // If we're editing, update the record.
     if ($form_state->getValue('id')) {
       $query->update('employees')
         ->fields([
@@ -98,8 +101,9 @@ class EmployeeForm extends FormBase {
         ->condition('id', $form_state->getValue('id'))
         ->execute();
       \Drupal::messenger()->addMessage($this->t('Employee details updated successfully.'));
-    } else {
-      // If it's a new entry, insert the record
+    }
+    else {
+      // If it's a new entry, insert the record.
       $query->insert('employees')
         ->fields([
           'emp_name' => $form_state->getValue('emp_name'),
@@ -109,22 +113,28 @@ class EmployeeForm extends FormBase {
         ->execute();
       \Drupal::messenger()->addMessage($this->t('Employee details saved successfully.'));
 
-      // Create a node after saving the employee
+      // Create a node after saving the employee.
       $node = Node::create([
-        'type' => 'employee_form', // Replace with your content type machine name
+      // Replace with your content type machine name.
+        'type' => 'employee_form',
         'title' => $form_state->getValue('emp_name'),
-        'field_emp_age' => $form_state->getValue('emp_age'), // Correct field machine name
-        'field_emp_email' => $form_state->getValue('emp_email'), // Correct field machine name
-        'field_emp_name' => $form_state->getValue('emp_name'), // Correct field machine name
+      // Correct field machine name.
+        'field_emp_age' => $form_state->getValue('emp_age'),
+      // Correct field machine name.
+        'field_emp_email' => $form_state->getValue('emp_email'),
+      // Correct field machine name.
+        'field_emp_name' => $form_state->getValue('emp_name'),
       ]);
 
       try {
         $node->save();
         \Drupal::messenger()->addMessage($this->t('Employee node created successfully.'));
-      } catch (\Exception $e) {
+      }
+      catch (\Exception $e) {
         \Drupal::logger('employee')->error('Error creating node: @message', ['@message' => $e->getMessage()]);
         \Drupal::messenger()->addError($this->t('An error occurred while creating the employee node.'));
       }
     }
   }
+
 }

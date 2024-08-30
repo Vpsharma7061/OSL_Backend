@@ -2,12 +2,32 @@
 
 namespace Drupal\employee\Controller;
 
+use Drupal\Core\Controller\ControllerBase;
+use Drupal\employee\Service\EmployeeService;
+use Drupal\node\Entity\Node;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Drupal\Core\Controller\ControllerBase;
-use Drupal\node\Entity\Node;
 
+/**
+ *
+ */
 class PostDataController extends ControllerBase {
+
+  protected $employeeService;
+
+  public function __construct(EmployeeService $employee_service) {
+    $this->employeeService = $employee_service;
+  }
+
+  /**
+   *
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('employee.custom_service')
+    );
+  }
 
   /**
    * Handles the POST request, saves form data, and creates a node.
@@ -22,29 +42,33 @@ class PostDataController extends ControllerBase {
     // Extract data from the JSON request body.
     $data = json_decode($request->getContent(), TRUE);
 
-    // Retrieve fields from the decoded JSON data.
-    $emp_name = isset($data['emp_name']) ? $data['emp_name'] : '';
-    $emp_age = isset($data['emp_age']) ? $data['emp_age'] : '';
-    $emp_email = isset($data['emp_email']) ? $data['emp_email'] : '';
-
-    // Validate the data.
-    if (empty($emp_name) || empty($emp_age) || empty($emp_email)) {
-      return new JsonResponse(['status' => 'error', 'message' => 'All fields are required.'], 400);
+    // Validate the data using the service.
+    if (!$this->employeeService->validateEmployeeData($data)) {
+      return new JsonResponse(['status' => 'error', 'message' => 'Invalid data provided.'], 400);
     }
 
-    // Create a new node of type 'employee_form'.
-    $node = Node::create([
-      'type' => 'employee_form', // Replace with your content type machine name
-      'title' => $emp_name,
-      'field_emp_name' => $emp_name, // Adjust field names based on your content type
-      'field_emp_age' => $emp_age,
-      'field_emp_email' => $emp_email,
-    ]);
+    try {
+      // Create the node after validation.
+      $node = Node::create([
+        'type' => 'employee_form',
+        'title' => $data['emp_name'],
+      // Assuming field name is 'field_emp_name'.
+        'field_emp_name' => $data['emp_name'],
+      // Assuming field name is 'field_emp_age'.
+        'field_emp_age' => $data['emp_age'],
+      // Assuming field name is 'field_emp_email'.
+        'field_emp_email' => $data['emp_email'],
+        'uid' => 1,
+      ]);
 
-    // Save the node to the database.
-    $node->save();
+      $node->save();
 
-    // Return a success response.
-    return new JsonResponse(['status' => 'success', 'message' => 'Data saved successfully!']);
+      return new JsonResponse(['status' => 'success', 'message' => 'Congratulations!! Data POST successfully!'], 201);
+    }
+    catch (\Exception $e) {
+      $this->logger()->error('Failed to save node: @message', ['@message' => $e->getMessage()]);
+      return new JsonResponse(['status' => 'error', 'message' => 'Failed to save data.'], 500);
+    }
   }
+
 }

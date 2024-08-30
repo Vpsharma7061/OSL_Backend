@@ -2,11 +2,30 @@
 
 namespace Drupal\employee\Controller;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\node\Entity\Node;
+use Drupal\employee\Service\EmployeeService;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
+/**
+ *
+ */
 class NodeApiController extends ControllerBase {
+
+  protected $employeeService;
+
+  public function __construct(EmployeeService $employee_service) {
+    $this->employeeService = $employee_service;
+  }
+
+  /**
+   *
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('employee.custom_service')
+    );
+  }
 
   /**
    * Returns details of all nodes created through a custom form.
@@ -15,18 +34,11 @@ class NodeApiController extends ControllerBase {
    *   A JSON response containing the node details.
    */
   public function getNodes() {
-    // Array to store node details.
     $nodes_data = [];
 
-    // Load all nodes. You can add conditions to filter specific content types.
-    $nids = \Drupal::entityQuery('node')
-    ->condition('type', 'employee_form')
-    ->accessCheck(TRUE)
-    ->execute();
-  
-    $nodes = Node::loadMultiple($nids);
+    // Use the service to get nodes of type 'employee_form'.
+    $nodes = $this->employeeService->getNodesByType('employee_form');
 
-    // Iterate over each node to extract details.
     foreach ($nodes as $node) {
       $node_data = [
         'id' => $node->id(),
@@ -34,27 +46,24 @@ class NodeApiController extends ControllerBase {
         'type' => $node->getType(),
         'created' => date('Y-m-d H:i:s', $node->getCreatedTime()),
       ];
-    
-      // Check if the field exists before accessing it
+
+      // Extract additional fields.
       if ($node->hasField('field_emp_name') && !$node->get('field_emp_name')->isEmpty()) {
         $node_data['emp_name'] = $node->get('field_emp_name')->value;
       }
-    
+
       if ($node->hasField('field_emp_age') && !$node->get('field_emp_age')->isEmpty()) {
         $node_data['emp_age'] = $node->get('field_emp_age')->value;
       }
-    
+
       if ($node->hasField('field_emp_email') && !$node->get('field_emp_email')->isEmpty()) {
         $node_data['emp_email'] = $node->get('field_emp_email')->value;
       }
-    
-      // Add more fields as needed.
-    
+
       $nodes_data[] = $node_data;
     }
-    
 
-    // Return the nodes data as a JSON response.
     return new JsonResponse($nodes_data);
   }
+
 }

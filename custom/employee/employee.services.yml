@@ -1,0 +1,4 @@
+services:
+  employee.custom_service:
+    class: 'Drupal\employee\Service\EmployeeService'
+    arguments: ['@entity_type.manager', '@logger.channel.default']

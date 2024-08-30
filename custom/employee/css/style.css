@@ -1,75 +1,62 @@
 /* General styles for employee table */
 .employee-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 16px;
-    color: #333;
-    background-color: #f9f9f9;
-  }
-  
-  .employee-table thead th {
-    background-color: #007bff;
-    color: #ffffff;
-    padding: 12px;
-    text-align: left;
-    border-bottom: 2px solid #0056b3;
-  }
-  
-  .employee-table tbody tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-  
-  .employee-table tbody tr:hover {
-    background-color: #e1e1e1;
-  }
-  
-  .employee-table td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .employee-table a {
-    text-decoration: none;
-    color: #007bff;
-    font-weight: bold;
-  }
-  
-  .employee-table a:hover {
-    text-decoration: underline;
-    color: #0056b3;
-  }
-  
-  /* Responsive table styling */
-  .employee-table.responsive-enabled {
-    width: 100%;
-    border: 0;
-  }
-  
-  .employee-table.responsive-enabled thead {
-    display: block;
-  }
-  
-  .employee-table.responsive-enabled tbody {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-  
-  .employee-table.responsive-enabled th, 
-  .employee-table.responsive-enabled td {
-    display: inline-block;
-    min-width: 150px;
-    vertical-align: top;
-  }
-  
-  /* Data striping if 'data-striping' attribute is used */
-  .employee-table[data-striping="1"] tbody tr:nth-child(odd) {
-    background-color: #ffffff;
-  }
-  
-  .employee-table[data-striping="1"] tbody tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-  
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 16px;
+  color: #333;
+  background-color: #f9f9f9;
+}
+.employee-table thead th {
+  background-color: #007bff;
+  color: #ffffff;
+  padding: 12px;
+  text-align: left;
+  border-bottom: 2px solid #0056b3;
+}
+.employee-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+.employee-table tbody tr:hover {
+  background-color: #e1e1e1;
+}
+.employee-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+.employee-table a {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+}
+.employee-table a:hover {
+  text-decoration: underline;
+  color: #0056b3;
+}
+/* Responsive table styling */
+.employee-table.responsive-enabled {
+  width: 100%;
+  border: 0;
+}
+.employee-table.responsive-enabled thead {
+  display: block;
+}
+.employee-table.responsive-enabled tbody {
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.employee-table.responsive-enabled th,
+.employee-table.responsive-enabled td {
+  display: inline-block;
+  min-width: 150px;
+  vertical-align: top;
+}
+/* Data striping if 'data-striping' attribute is used */
+.employee-table[data-striping="1"] tbody tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+.employee-table[data-striping="1"] tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
